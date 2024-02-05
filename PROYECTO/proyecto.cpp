@@ -1,12 +1,13 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-//#include <stdlib.h>
+// #include <stdlib.h>
 using namespace std;
 
 int opcion;
 int adex;
 int conti;
+bool continuar = true;
 int menu()
 {
     cout << "|--------------MENU--------------|\n|1-Registrar Nacimiento          |\n|2-Registrar Muerte              |\n|3-Mostrar Registro de Fallecidos|\n|4-Mostrar Registro de Nacimiento|\n|5-Salir                         |\n|--------------------------------|";
@@ -56,17 +57,12 @@ int registrarNacimiento()
     {
         cout << "Error al abrir el archivo" << endl;
     }
-    cout<<"\nVa a reaizar otra consulta (si:1 | no:0): ";
-    cin>> conti;
-    switch (conti)
+    cout << "\nVa a reaizar otra consulta (si:1 | no:0): ";
+    cin >> conti;
+    cout << "\n";
+    if (conti != 1)
     {
-    case 0:
-        cout<<"Hasta Luego...";
-        break;
-    case 1:
-        menu();
-    default:
-        break;
+        continuar = false;
     }
     return 0;
 }
@@ -77,10 +73,7 @@ string causaMuerte;
 
 int registrarMuerte()
 {
-    // Crear un nuevo registro con los datos de la muerte del animal
-    // string registro = to_string(idAnimal) + "," + fechaMuerte + "," + causaMuerte;
-
-    // Abrir el archivo en modo de escritura al final del archivo
+    //Aqui abre el archivo en modo de escritura al final del archivo
     ofstream archivo("muertes_animales.txt", ios::app);
     if (archivo.is_open())
     {
@@ -92,24 +85,21 @@ int registrarMuerte()
             cin >> fechaMuerte;
             cout << "\nIngrese causa de la muerte: ";
             cin >> causaMuerte;
-            archivo << idAnimal << "," << fechaMuerte << "," << causaMuerte << endl; // Escribir los datos en el archivo separados por comas
-            // archivo << registro << endl; // Escribir el registro en el archivo
+            archivo << idAnimal << "," << fechaMuerte << "," << causaMuerte << endl; //Aqui escribe los datos en el archivo separados por comas
             cout << "\nMuerte del animal registrada correctamente" << endl;
         }
-        archivo.close(); // Cerrar el archivo
+        archivo.close(); //Esto cierra el archivo
     }
     else
     {
         cout << "Error al abrir el archivo" << endl;
     }
-    cout<<"\nVa a reaizar otra consulta (si:1 | no:0): ";
-    cin>> conti;
-    if (conti == 1)
+    cout << "\nVa a reaizar otra consulta (si:1 | no:0): ";
+    cin >> conti;
+    cout << "\n";
+    if (conti != 1)
     {
-        menu();
-    }
-    else{
-        system("exit");
+        continuar = false;
     }
     return 0;
 }
@@ -129,26 +119,29 @@ int mostrarFallecidos()
     {
         cout << "Error al abrir el archivo." << endl;
     }
-    cout<<"\nVa a reaizar otra consulta (si:1 | no:0): ";
-    cin>> conti;
+    cout << "\nVa a reaizar otra consulta (si:1 | no:0): ";
+    cin >> conti;
+    cout << "\n";
+    if (conti != 1)
+    {
+        continuar = false;
+    }
     if (conti == 1)
     {
         menu();
     }
-    else{
-        system("exit");
-    }
+    
     return 0;
 }
 int mostrarNacimiento()
 {
-    ifstream archivo("datos_nacimento.txt");
-    string linea;
+    ifstream archivo("datos_nacimiento.txt");
+    string lineax;
     if (archivo.is_open())
     {
-        while (getline(archivo, linea))
+        while (getline(archivo, lineax))
         {
-            cout << linea << endl;
+            cout << lineax << endl;
         }
         archivo.close();
     }
@@ -156,13 +149,17 @@ int mostrarNacimiento()
     {
         cout << "Error al abrir el archivo." << endl;
     }
-    cout<<"\nVa a reaizar otra consulta (si:1 | no:0): ";
-    cin>> conti;
+    cout << "\nVa a reaizar otra consulta (si:1 | no:0): ";
+    cin >> conti;
+    cout << "\n";
+    if (conti != 1)
+    {
+        continuar = false;
+    }
     if (conti == 1)
     {
         menu();
     }
-    
     
     return 0;
 }
@@ -170,28 +167,33 @@ int mostrarNacimiento()
 int main()
 {
     menu();
-    while (1 <= opcion <= 3)
+    while (1 <= opcion <= 5)
     {
         switch (opcion)
         {
         case 1:
+            system("cls");
             registrarNacimiento();
-            menu();
-            break;
+            cout<<"Hasta luego\n";
+            return 0;
         case 2:
+            system("cls");
             registrarMuerte();
-            menu();
-            break;
+            cout<<"Hasta luego\n";
+            return 0;
         case 3:
+            system("cls");
             mostrarFallecidos();
-            menu();
-            break;
+            cout<<"Hasta Luego\n";
+            return 0;
         case 4:
+            system("cls");
             mostrarNacimiento();
-            menu();
-            break;
+            cout<<"Hasta Luego\n";
+            return 0;
         case 5:
-            break;
+            system("cls");
+            return 0;
         default:
             break;
         }
