@@ -1,104 +1,200 @@
+#include <string>
 #include <iostream>
-#include <vector>
-#include <chrono>
-
+#include <fstream>
+//#include <stdlib.h>
 using namespace std;
 
-struct Ganado
+int opcion;
+int adex;
+int conti;
+int menu()
 {
-  string id;
-  string nombre;
-  string raza;
-  int edad;
-  bool desparasitado;
-  int fecha_desparasitacion;
-};
-
-// Función para obtener la fecha actual
-int getFechaActual()
-{
-  return chrono::system_clock::to_time_t(chrono::system_clock::now());
+    cout << "|--------------MENU--------------|\n|1-Registrar Nacimiento          |\n|2-Registrar Muerte              |\n|3-Mostrar Registro de Fallecidos|\n|4-Mostrar Registro de Nacimiento|\n|5-Salir                         |\n|--------------------------------|";
+    cout << "\nIngrese una opcion>> ";
+    cin >> opcion;
+    return opcion;
 }
 
-// Función para calcular la fecha de la próxima desparasitación
-int calcularFechaDesparasitacion(Ganado ganado)
-{
-  return ganado.edad * 3;
-}
+int num_naci;
+int id_ani;
+string raza;
+string sexo;
+string fechaNacimiento;
+double peso;
+string nombrePadre;
+string nombreMadre;
 
-void agregarGanado(vector<Ganado> &ganados)
+int registrarNacimiento()
 {
-  Ganado ganado;
-  cout << "Ingrese los datos del ganado: " << endl;
-  cout << "ID: ";
-  cin >> ganado.id;
-  cout << "Nombre: ";
-  cin >> ganado.nombre;
-  cout << "Raza: ";
-  cin >> ganado.raza;
-  cout << "Edad: ";
-  cin >> ganado.edad;
-  ganados.push_back(ganado);
-}
-
-void listarGanados(vector<Ganado> &ganados)
-{
-  for (Ganado ganado : ganados)
-  {
-    cout << ganado.id << " " << ganado.nombre << " " << ganado.raza << " " << ganado.edad << " " << ganado.desparasitado << endl;
-  }
-}
-
-void desparasitarGanados(vector<Ganado> &ganados)
-{
-  for (Ganado ganado : ganados)
-  {
-    if (!ganado.desparasitado)
+    ofstream archivo("datos_nacimiento.txt", ios::app);
+    if (archivo.is_open())
     {
-      int fecha_desparasitacion = calcularFechaDesparasitacion(ganado);
-      if (fecha_desparasitacion <= getFechaActual())
-      {
-        ganado.desparasitado = true;
-        cout << "Se ha desparasitado a " << ganado.nombre << endl;
-      }
+        cout << "\nCuantos Vacunos desea agregar: ";
+        cin >> num_naci;
+        for (int i = 0; i < num_naci; i++)
+        {
+            cout << "\nIngrese id del animal: ";
+            cin >> id_ani;
+            cout << "\nIngrese la raza: ";
+            cin >> raza;
+            cout << "\nIngrese el sexo: ";
+            cin >> sexo;
+            cout << "\nIngrese fecha de nacimiento: ";
+            cin >> fechaNacimiento;
+            cout << "\nIngrese el peso: ";
+            cin >> peso;
+            cout << "\nIngrese nombre del padre: ";
+            cin >> nombrePadre;
+            cout << "\nIngrese nombre de la madre: ";
+            cin >> nombreMadre;
+            archivo << id_ani << "," << raza << "," << sexo << "," << fechaNacimiento << "," << peso << "," << nombrePadre << "," << nombreMadre << endl; // Escribir los datos en el archivo separados por comas
+            cout << "Nacimiento del animal registrado correctamente" << endl;
+        }
+        archivo.close(); // Cerrar el archivo
     }
-  }
-}
-// Función para generar el inventario de toretes para venta
-void generarInventarioVentasToretes(vector<Ganado> &ganados)
-{
-  for (Ganado ganado : ganados)
-  {
-    if (ganado.raza == "toro" && ganado.edad >= 18)
+    else
     {
-      cout << ganado.id << " " << ganado.nombre << " " << ganado.raza << " " << ganado.edad << endl;
+        cout << "Error al abrir el archivo" << endl;
     }
-  }
+    cout<<"\nVa a reaizar otra consulta (si:1 | no:0): ";
+    cin>> conti;
+    switch (conti)
+    {
+    case 0:
+        cout<<"Hasta Luego...";
+        break;
+    case 1:
+        menu();
+    default:
+        break;
+    }
+    return 0;
+}
+
+int idAnimal;
+string fechaMuerte;
+string causaMuerte;
+
+int registrarMuerte()
+{
+    // Crear un nuevo registro con los datos de la muerte del animal
+    // string registro = to_string(idAnimal) + "," + fechaMuerte + "," + causaMuerte;
+
+    // Abrir el archivo en modo de escritura al final del archivo
+    ofstream archivo("muertes_animales.txt", ios::app);
+    if (archivo.is_open())
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            cout << "\nIngrese id: ";
+            cin >> idAnimal;
+            cout << "\nIngrese fecha de muerte: ";
+            cin >> fechaMuerte;
+            cout << "\nIngrese causa de la muerte: ";
+            cin >> causaMuerte;
+            archivo << idAnimal << "," << fechaMuerte << "," << causaMuerte << endl; // Escribir los datos en el archivo separados por comas
+            // archivo << registro << endl; // Escribir el registro en el archivo
+            cout << "\nMuerte del animal registrada correctamente" << endl;
+        }
+        archivo.close(); // Cerrar el archivo
+    }
+    else
+    {
+        cout << "Error al abrir el archivo" << endl;
+    }
+    cout<<"\nVa a reaizar otra consulta (si:1 | no:0): ";
+    cin>> conti;
+    if (conti == 1)
+    {
+        menu();
+    }
+    else{
+        system("exit");
+    }
+    return 0;
+}
+int mostrarFallecidos()
+{
+    ifstream archivo("muertes_animales.txt");
+    string linea;
+    if (archivo.is_open())
+    {
+        while (getline(archivo, linea))
+        {
+            cout << linea << endl;
+        }
+        archivo.close();
+    }
+    else
+    {
+        cout << "Error al abrir el archivo." << endl;
+    }
+    cout<<"\nVa a reaizar otra consulta (si:1 | no:0): ";
+    cin>> conti;
+    if (conti == 1)
+    {
+        menu();
+    }
+    else{
+        system("exit");
+    }
+    return 0;
+}
+int mostrarNacimiento()
+{
+    ifstream archivo("datos_nacimento.txt");
+    string linea;
+    if (archivo.is_open())
+    {
+        while (getline(archivo, linea))
+        {
+            cout << linea << endl;
+        }
+        archivo.close();
+    }
+    else
+    {
+        cout << "Error al abrir el archivo." << endl;
+    }
+    cout<<"\nVa a reaizar otra consulta (si:1 | no:0): ";
+    cin>> conti;
+    if (conti == 1)
+    {
+        menu();
+    }
+    
+    
+    return 0;
 }
 
 int main()
 {
-  vector<Ganado> ganados;
-
-  // Preguntamos la cantidad de ganados a agregar
-  int cantidad_ganados;
-  cout << "¿Cuántos ganados desea agregar?: ";
-  cin >> cantidad_ganados;
-
-  // Agregamos los ganados
-  for (int i = 0; i < cantidad_ganados; i++)
-  {
-    agregarGanado(ganados);
-  }
-
-  // Listamos los animales
-  listarGanados(ganados);
-
-  // Desparasitamos a los animales que lo necesitan
-  desparasitarGanados(ganados);
-
-  // Generamos un inventario de los toretes que se venderán en setiembre
-  generarInventarioVentasToretes(ganados);
-
-  return 0;
+    menu();
+    while (1 <= opcion <= 3)
+    {
+        switch (opcion)
+        {
+        case 1:
+            registrarNacimiento();
+            menu();
+            break;
+        case 2:
+            registrarMuerte();
+            menu();
+            break;
+        case 3:
+            mostrarFallecidos();
+            menu();
+            break;
+        case 4:
+            mostrarNacimiento();
+            menu();
+            break;
+        case 5:
+            break;
+        default:
+            break;
+        }
+    }
+    return 0;
 }
